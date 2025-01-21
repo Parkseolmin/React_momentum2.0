@@ -1,0 +1,79 @@
+.clockContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.clock {
+  font-family: 'Arial', sans-serif;
+  font-size: 10rem;
+  color: #ffffff;
+  padding: 100px 30px 0px;
+  border-radius: 10px;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.changeArrow {
+  position: absolute;
+  top: 62%;
+  left: -45px;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  border-radius: 100%;
+  line-height: 1;
+  display: none;
+  cursor: pointer;
+  transition: all 0.6s ease-in;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.clock:hover .changeArrow {
+  display: inline-block;
+  transition: all 0.6s ease-out;
+}
+
+.changeArrow:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 1);
+}
+
+/* 기존의 .itmeBox CSS에서 display: none; 제거 */
+.itmeBox {
+  font-size: 2.5rem;
+  background-color: #fff;
+  display: inline-block; /* React 상태에 따라 동적으로 제어되므로 이 줄을 제거합니다. */
+  color: rgb(146, 146, 146);
+  border-radius: 20px;
+  line-height: 1px;
+  position: absolute;
+  top: 63%;
+  padding: 3px;
+  left: -80px;
+}
+
+a.active {
+  color: rgb(0, 0, 0);
+}
+
+@media screen and (max-width: 768px) {
+  .clockContainer {
+    row-gap: 10px;
+  }
+  .clock {
+    font-size: 4rem;
+    padding: 10px;
+  }
+  .changeArrow {
+    top: -55%;
+    left: 40%;
+  }
+  .itmeBox {
+    top: -53%;
+    left: 33%;
+  }
+}

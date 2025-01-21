@@ -1,0 +1,92 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-grey);
+  background-color: var(--color-background-light); /* 흰색 투명도 조절 */
+  border: 2px solid var(--color-background-light); /* 흰색 테두리 투명도 조절 */
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); /* 검정색 투명도 조절 */
+  margin: 0.3rem;
+  border-radius: 1rem;
+  border: none;
+  padding: 0 0.5rem;
+}
+
+.toggle {
+  background-color: transparent;
+  color: var(--color-fire);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  padding-left: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.toggle:hover {
+  transform: scale(1.1) rotate(-10deg);
+}
+
+.filters {
+  display: flex;
+}
+.filter {
+  font-size: 1rem;
+  margin: 0.3rem;
+  background-color: transparent;
+  opacity: 0.85;
+  font-weight: bold;
+  color: var(--color-fire);
+  padding-top: 5px;
+}
+
+.filter:hover,
+.filter.selected {
+  opacity: 1;
+}
+
+.filter.selected::after {
+  content: '';
+  display: block;
+  margin-top: 0.2rem;
+  border: 1.2px solid var(--color-white);
+}
+@keyframes example-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.filter.selected::after {
+  content: '';
+  display: block;
+  margin-top: 0.2rem;
+  border: 1.2px solid var(--color-white);
+  animation: example-animation 1s infinite;
+}
+
+@media screen and (max-width: 768px) {
+  .filter {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .filter {
+    font-size: 1rem;
+  }
+  .filters {
+    margin: 0;
+  }
+  .header {
+    flex-direction: column;
+  }
+  .toggle {
+    padding: 10px 0 0 0;
+  }
+}

@@ -1,0 +1,230 @@
+a {
+  color: #acacac;
+  text-decoration: none;
+  outline: none;
+}
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+header {
+  position: relative;
+}
+
+.header__wrap {
+  position: absolute;
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+}
+
+.header__left,
+.header__right,
+.site {
+  display: flex;
+  padding: 5px;
+}
+.header__left {
+  column-gap: 10px;
+  margin-left: 15px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  align-items: center;
+  display: none;
+}
+
+.header__left > a {
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.header__right {
+  width: 156.58px;
+  height: 91.67px;
+  margin: 5px;
+}
+
+.header__left > a:hover {
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.1);
+  color: rgb(135, 135, 135);
+}
+
+.site {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  max-width: 480px;
+  width: 100%;
+  padding: 0 2em;
+}
+
+.siteNav {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.siteNav .link {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -5px;
+  right: 25px;
+  margin-right: -20px;
+  cursor: pointer;
+  z-index: 99;
+  color: white;
+}
+
+.siteNav .link .close,
+.siteNav input:checked ~ label .menu {
+  display: none;
+}
+
+.siteNav input:checked ~ label .close {
+  display: block;
+}
+
+.siteNav ul.submenu {
+  left: -8.5em;
+  position: absolute;
+  bottom: 0em;
+  width: 350px;
+  transform: rotate(26deg);
+  visibility: hidden;
+  transition: visibility 0.6s;
+  z-index: 2;
+}
+.siteNav > input:checked ~ ul {
+  visibility: inherit;
+}
+/* 메뉴가 열릴 때 (checked 상태) */
+.siteNav > input:checked ~ ul li {
+  transform: rotate(calc((-110deg / 4) * var(--item))) translateX(0); /* 방사형으로 원래 위치로 */
+  opacity: 1;
+}
+
+/* 메뉴가 닫힐 때 (checked 해제 상태에서 순차적으로 닫히게) */
+.siteNav > input:not(:checked) ~ ul li {
+  opacity: 0;
+  transform: rotate(calc((-110deg / 4) * var(--item))) translateX(157px); /* 원래 숨겨진 위치로 이동 */
+  transition-delay: calc(
+    0.1s * (4 - var(--item))
+  ); /* 닫힐 때 역순으로 딜레이 */
+}
+
+/* 기존 리스트 항목의 기본 상태 (숨겨진 상태일 때) */
+.siteNav ul li {
+  --item: 1;
+  position: absolute;
+  width: 133px;
+  height: 60px;
+  transform: rotate(calc((-110deg / 4) * var(--item))) translateX(157px); /* 방사형으로 퍼지는 transform */
+  transform-origin: right center;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: transform 0.7s, opacity 0.2s;
+  transition-delay: calc(
+    0.1s * var(--item)
+  ); /* 열릴 때 순차적으로 딜레이 추가 */
+}
+
+.siteNav ul li:nth-child(2) {
+  --item: 2;
+}
+.siteNav ul li:nth-child(3) {
+  --item: 3;
+}
+.siteNav ul li:nth-child(4) {
+  --item: 4;
+}
+
+.siteNav ul li a {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.siteNav ul li a i {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 2px solid transparent;
+  transition: border 0.3s, background-color 0.3s;
+}
+
+.siteNav ul li a:hover i {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.siteNav ul li a span {
+  position: absolute;
+  right: calc(100% + 0.5em);
+  text-align: right;
+  font-size: 14px;
+  padding: 0 10px;
+  border-radius: 25px;
+  z-index: -1;
+  transform: translateX(50px);
+  transition: color 0.3s, transform 0.3s 0.4s, opacity 0.2s 0.4s;
+}
+
+.siteNav > input:checked ~ ul li a span {
+  transform: translateX(0);
+}
+
+.siteNav ul li a span::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: 25px;
+  z-index: -1;
+  transition: background-color 0.3s;
+}
+
+.siteNav ul li a:hover span::before {
+  background-color: transparent;
+}
+
+.siteNav ul li a:hover span {
+  color: white;
+}
+
+.siteNav ul li:nth-child(4) a i {
+  transform: rotate(260deg);
+}
+
+@media screen and (max-width: 768px) {
+  .header__left {
+    display: flex;
+  }
+  .header__right {
+    margin-left: 0px;
+  }
+  .site {
+    display: none;
+  }
+}

@@ -1,0 +1,47 @@
+# 자동으로 텍스트 파일의 줄바꿈을 표준화
+* text=auto
+
+# 자바스크립트 및 타입스크립트 파일은 LF(Line Feed) 사용
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+
+# JSON, YAML 등 설정 파일도 LF 사용
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# 쉘 스크립트 파일은 LF 사용
+*.sh text eol=lf
+
+# Markdown 및 기타 문서 파일도 LF 사용
+*.md text eol=lf
+*.txt text eol=lf
+
+# 바이너리 파일은 줄바꿈 변환하지 않음
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.mp4 binary
+*.zip binary
+*.gz binary
+
+# Windows 특정 파일은 CRLF 사용
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# CSS와 HTML 파일은 LF 사용
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+
+# Node.js 관련 파일은 LF 사용
+*.lock text eol=lf
+*.env text eol=lf
+
+# Git Ignore
+\!.gitattributes

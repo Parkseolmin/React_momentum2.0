@@ -1,0 +1,180 @@
+:root {
+  --color-red: #f54e4e;
+  --color-green: #4aec8c;
+  --color-blue: rgba(88, 187, 211, 0.8);
+  --color-greenUp: rgba(34, 187, 140, 0.85);
+  --color-bg-dark: #f5f5f5;
+  --color-bg: #fdfffd;
+  --color-grey: #d1d1d1;
+  --color-text: rgb(49, 49, 49);
+  --color-accent: #295a8a;
+  --color-white: white;
+  --color-scrollbar: rgba(45, 45, 45, 0.2);
+  --color-background-light: rgba(255, 255, 255, 0.2);
+  --color-fire: rgba(255, 255, 255, 1);
+}
+
+html.dark {
+  --color-fire: rgb(80, 220, 242);
+  --color-background-light: rgba(0, 0, 0, 0.2);
+  --color-text: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+body {
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.yt_article_summary_widget_wrapper,
+.glasp_pdf_summary_btn {
+  display: block !important;
+}
+
+/* 스크롤바 전체 영역 */
+::-webkit-scrollbar {
+  width: 1px; /* 세로축 스크롤바 폭 너비 */
+  height: 1px; /* 가로축 스크롤바 폭 너비 */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.mainBackground {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  transition: transform 1s ease-out;
+}
+
+.mainBackground.animate-bg {
+  transform: scale(1.03); /* 살짝 확대 */
+}
+
+.sectionBackground {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* 사라지는 컴포넌트 깜빡임 방지 */
+}
+
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.4s ease-out;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.5s ease, transform 0.4s ease-out;
+}
+
+.pomodoro {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 0;
+  display: inline-block;
+  width: 100px;
+  cursor: pointer;
+}
+
+button.with-text {
+  width: auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1.4rem;
+  line-height: 36px;
+}
+
+button.with-text svg {
+  width: 36px;
+  margin-right: 5px;
+  float: left;
+}
+
+.settinglabel {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  text-transform: capitalize;
+  color: #f6f2f2;
+  font-weight: 600;
+}
+
+.CircularProgressbar-trail,
+.CircularProgressbar-path {
+  stroke-width: 3;
+}
+
+.slider {
+  height: 40px;
+  border: 2px solid var(--color-blue);
+  border-radius: 50px;
+  width: 300px;
+  transition: all 0.3s ease-in;
+}
+
+.thumb {
+  background-color: var(--color-blue);
+  cursor: pointer;
+  width: 35px;
+  height: 36px;
+  border-radius: 20px;
+}
+
+.slider.green {
+  border: 2px solid var(--color-greenUp);
+}
+
+.slider.green .thumb {
+  background-color: var(--color-greenUp);
+}
+
+.hidden {
+  display: none;
+}
+
+@media screen and (max-width: 500px) {
+  .playbtn {
+    width: 3.5rem;
+  }
+  .pausebtn {
+    width: 4rem;
+  }
+}

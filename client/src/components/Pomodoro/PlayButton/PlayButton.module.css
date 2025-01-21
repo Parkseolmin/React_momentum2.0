@@ -1,0 +1,19 @@
+.playbtn {
+  width: 100%;
+}
+
+.playbtn p {
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  padding: 10px 15px;
+  font-size: 1rem;
+}
+@media screen and (max-width: 768px) {
+  .playbtn {
+    margin-bottom: 10px;
+  }
+  .playbtn p {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+}

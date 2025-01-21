@@ -1,0 +1,119 @@
+.progressBox {
+  /* max-width: 500px; */
+  width: 500px;
+  position: relative;
+}
+.circularProgressbarWorkMode {
+  position: relative;
+}
+
+.circularProgressbarBreakMode {
+  position: relative;
+}
+
+.btnbox {
+  position: absolute;
+  bottom: 6.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.changeArrow {
+  position: absolute;
+  top: 40%;
+  left: -45px;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 100%;
+  line-height: 1;
+  display: none;
+  cursor: pointer;
+  transition: all 0.6s ease-in;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.progressBox:hover .changeArrow {
+  display: inline-block;
+  transition: all 0.6s ease-out;
+}
+
+.changeArrow:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 1);
+}
+
+.itmeBox {
+  font-size: 2.5rem;
+  background-color: #fff;
+  display: inline-block;
+  color: rgb(146, 146, 146);
+  border-radius: 20px;
+  line-height: 1px;
+  position: absolute;
+  top: 40%;
+  padding: 2px;
+  left: -80px;
+}
+
+a.active {
+  color: rgb(0, 0, 0);
+}
+
+.settingBtn {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.modeChangeBtn {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 24%;
+  z-index: 10;
+}
+
+.focusButton,
+.breakButton {
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 768px) {
+  .progressBox {
+    width: 330px;
+    transition: all 0.3s ease-out;
+  }
+  .btnbox {
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .changeArrow {
+    padding: 10px;
+    top: 20%;
+    left: 45%;
+    z-index: 1;
+  }
+  .itmeBox {
+    font-size: 2rem;
+    top: 20%;
+    left: 40%;
+    z-index: 2;
+  }
+  .settingBtn {
+    margin-top: 15px;
+  }
+  .btnbox {
+    bottom: 4rem;
+  }
+  .focusButton,
+  .breakButton {
+    padding: 0px;
+    margin: 0px;
+  }
+}

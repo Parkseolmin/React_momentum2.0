@@ -1,0 +1,61 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+}
+.weatherInfo {
+  position: relative;
+  cursor: pointer;
+  color: white;
+  margin-left: 20px;
+  z-index: 1;
+}
+
+.iconTmp {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  line-height: 10px;
+  padding: 20px 10px 10px 30px;
+  gap: 10px;
+}
+.iconTmp > span {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 100%;
+  width: 30px;
+}
+
+.temp {
+  font-size: 2rem;
+}
+
+.weatherName {
+  text-align: center;
+  font-size: 1rem;
+  opacity: 0.85;
+  letter-spacing: -1px;
+}
+
+.loadingSpinner {
+  margin-top: 30px;
+  margin-left: 35px;
+}
+
+@media screen and (max-width: 768px) {
+  .weatherName {
+    font-size: 0.8rem;
+  }
+  .loadingSpinner {
+    margin-top: 30px;
+    margin-right: 35px;
+  }
+}

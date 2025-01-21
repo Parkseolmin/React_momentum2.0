@@ -1,0 +1,89 @@
+.DiaryContainer {
+  color: var(--color-fire);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: 1200px;
+}
+
+.ResultTitle {
+  margin: 10px;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.Divider {
+  margin-top: 20px;
+}
+
+.CardContainer {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 20px;
+  border-radius: 2px;
+  margin: 10px 0px;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.CardTitle {
+  margin: 6px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--text-fire);
+  display: flex;
+  align-items: center;
+}
+
+.CardContent {
+  font-size: 1rem;
+  padding: 0px 10px 0 10px;
+}
+
+.ActionList {
+  padding-left: 15px;
+  font-size: 22px;
+}
+
+.ActionListItem {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .DiaryContainer {
+    padding: 10px;
+  }
+
+  .ResultTitle {
+    font-size: 1.1rem;
+  }
+
+  .Divider {
+    margin-top: 10px;
+  }
+
+  .CardContainer {
+    padding: 10px;
+  }
+
+  .CardTitle {
+    font-size: 1rem;
+  }
+
+  .CardContent {
+    font-size: 0.8rem;
+    padding: 0px 10px 0 10px;
+  }
+
+  .ActionList {
+    padding-left: 15px;
+    font-size: 12px;
+  }
+
+  .ActionListItem {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
+}

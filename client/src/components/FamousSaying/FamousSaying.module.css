@@ -1,0 +1,36 @@
+.sentenceBox {
+  width: 400px;
+  margin: 20px;
+}
+
+.sentence {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.author {
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sentence:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+@media screen and (max-width: 500px) {
+  .sentenceBox {
+    width: 250px;
+  }
+  .sentence {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .sentence:hover {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+  }
+}
