@@ -38,7 +38,7 @@ export default function Main() {
       setTimeout(() => {
         setIsFadingOut(false);
         setCurrentPath(location.pathname);
-      }, 500); // 500ms는 CSS에서 정의한 트랜지션 시간
+      }, 300); // 500ms는 CSS에서 정의한 트랜지션 시간
     }
   }, [location.pathname, currentPath]);
 
