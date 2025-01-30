@@ -1,75 +1,77 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './TodoList.module.css';
 import AddTodo from '../AddTodo/AddTodo';
 import TodoItem from '../TodoItem/TodoItem';
-import { useTodos } from 'context/TodosContext';
+// import { useTodos } from 'context/TodosContext';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  deleteTodo,
+  fetchTodayTodos,
+  fetchTodos,
+  updateTodo,
+} from 'store/features/todos/todosSlice';
+import SearchInput from '../SearchInput/SearchInput';
 
-export default function TodoList({ filter }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { todos, dispatch } = useTodos();
+export default function TodoList({ category, filter }) {
+  const dispatch = useDispatch();
+  // 리덕스 상태에서 필요한 데이터 가져오기
+  const todos = useSelector((state) => state.todos.byCategory[category] || []);
+  const error = useSelector((state) => state.todos.error);
+  const [editingId, setEditingId] = useState(null);
+  const [search, setSearch] = useState('');
 
-  const handleAdd = (todo) => {
-    dispatch({ type: 'ADD', todo });
-  };
-
-  const handleUpdate = (updated) => {
-    dispatch({ type: 'UPDATE', updated });
-  };
-
-  const handleDelete = (deleted) => {
-    dispatch({ type: 'DELETE', deleted });
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  function getFilteredItems(filter, searchTerm) {
-    if (filter === 'all') {
-      if (!searchTerm) {
-        return todos;
-      } else {
-        return todos.filter((todo) =>
-          todo.text.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+  useEffect(() => {
+    if (category === 'today') {
+      dispatch(fetchTodayTodos({ category, filter, search }));
     } else {
-      if (!searchTerm) {
-        return todos.filter((todo) => todo.status === filter);
-      } else {
-        return todos
-          .filter((todo) => todo.status === filter)
-          .filter((todo) =>
-            todo.text.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-      }
+      dispatch(fetchTodos({ category, filter, search }));
     }
-  }
+  }, [dispatch, category, search, filter]);
 
-  const filtered = getFilteredItems(filter, searchTerm);
+  if (error) return <p>Error : {error}</p>;
+
+  const handleUpdate = async (updated) => {
+    dispatch(updateTodo(updated));
+    setEditingId(null);
+  };
+
+  const handleDelete = async (deleted) => {
+    dispatch(deleteTodo({ id: deleted.id, category }));
+  };
 
   return (
     <section className={styles.container}>
-      <input
-        className={styles.searchInput}
-        type='text'
-        placeholder='검색...'
-        value={searchTerm}
-        onChange={handleSearch}
-      />
+      <SearchInput search={search} onSearchChange={setSearch} />
+
+      {/* 조건부 팝업 */}
+      {category === 'today' && todos.length === 0 && (
+        <div className={styles.popup}>
+          <img
+            src='/images/momentum01.png' // 이미지 경로
+            alt='아무런 투두가 없습니다.'
+            className={styles.popupImage}
+          />
+          <h3>하루에 집중하세요.</h3>
+          <p>매일 새로 고침되는 목록인 나의 하루</p>
+          <p>로 작업을 완료하세요.</p>
+        </div>
+      )}
+
       <ul className={styles.list}>
-        {filtered.map((item) => {
+        {todos.map((todo) => {
           return (
             <TodoItem
-              key={item.id}
-              todo={item}
+              key={todo.id}
+              todo={todo}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              isEditing={editingId === todo.id}
+              setEditing={setEditingId}
             />
           );
         })}
       </ul>
-      <AddTodo onAdd={handleAdd} />
+      <AddTodo category={category} />
     </section>
   );
 }

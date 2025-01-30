@@ -220,6 +220,7 @@ header {
 @media screen and (max-width: 768px) {
   .header__left {
     display: flex;
+    z-index: 1;
   }
   .header__right {
     margin-left: 0px;

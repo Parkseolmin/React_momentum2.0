@@ -28,3 +28,20 @@
   color: var(--color-text);
   font-size: 1.2rem;
 }
+
+.popup {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.popupImage {
+  width: 150px;
+  margin-bottom: 10px;
+}
+.popup h3 {
+  color: #fff;
+}
+.popup p {
+  font-size: 16px;
+  color: #fff;
+}
