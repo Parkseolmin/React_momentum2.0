@@ -11,6 +11,12 @@ todoController.resetTodayTodos = asyncHandler(async (req, res) => {
   res.status(200).json(result); // 결과 반환
 });
 
+todoController.getCompletedTodayTodos = asyncHandler(async (req, res) => {
+  const { userId } = req.user; // 인증된 사용자 ID
+  const completedTodos = await todoService.getCompeletedTodayTodos(userId);
+  res.status(200).json(completedTodos);
+});
+
 // 오늘 작성된 'today' 카테고리 데이터 가져오기
 // - 인증된 사용자 ID와 쿼리 매개변수를 기반으로 데이터를 검색
 // - todos.service.js의 searchTodos 메서드를 호출하여 처리

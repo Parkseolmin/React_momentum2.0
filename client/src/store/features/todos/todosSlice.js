@@ -5,6 +5,21 @@ import api from 'api/api';
 // 비동기 작업 정의 (Async Thunks)
 // ==========================
 
+// 오늘 완료된 'today' 카테고리의 투두 가져오기
+export const fetchCompletedTodayTodos = createAsyncThunk(
+  'todos/fetchCompletedTodayTodos',
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get('/todos/today/completed');
+      return response.data; // 완료된 todos 반환
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || 'Failed to fetch completed today todos',
+      );
+    }
+  },
+);
+
 //  오늘 할 일을 가져오는 액션
 export const fetchTodayTodos = createAsyncThunk(
   'todos/fetchTodayTodos',
@@ -100,6 +115,7 @@ const todosSlice = createSlice({
     byCategory: {
       today: [], // "오늘" 할 일
       work: [], // "작업" 할 일
+      completedToday: [], // '오늘 완료된' 할 ㅇ;ㄹㄹ
     },
     loading: false, // 로딩 상태
     error: null, // 에러 메시지
@@ -107,6 +123,19 @@ const todosSlice = createSlice({
   reducers: {}, // 동기적인 리듀서(필요 시 추가)
   extraReducers: (builder) => {
     builder
+      // ====== fetchCompeletedTodayTodos 처리 ======
+      .addCase(fetchCompletedTodayTodos.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCompletedTodayTodos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.byCategory.completedToday = action.payload;
+      })
+      .addCase(fetchCompletedTodayTodos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       // ====== fetchTodayTodos 처리 ======
       .addCase(fetchTodayTodos.pending, (state) => {
         state.loading = true;
