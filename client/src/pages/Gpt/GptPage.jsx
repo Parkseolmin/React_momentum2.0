@@ -7,7 +7,6 @@ import { IoSunny } from 'react-icons/io5';
 import UserInput from 'components/Gpt/UserInput/UserInput';
 import DiaryDisplay from 'components/Gpt/DiaryDisplay/DiaryDisplay';
 import { Helmet } from 'react-helmet-async';
-
 export default function GptPage() {
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const [data, setData] = useState({});

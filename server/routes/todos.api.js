@@ -11,6 +11,12 @@ const router = express.Router();
 // - 인증된 사용자만 접근 가능
 router.get('/reset-today', authMiddleware, todoController.resetTodayTodos);
 
+router.get(
+  '/today/completed',
+  authMiddleware,
+  todoController.getCompletedTodayTodos,
+);
+
 // ======================================================
 // Todos Router - TodoList
 // ======================================================

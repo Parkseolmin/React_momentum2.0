@@ -15,6 +15,28 @@ const resetTodayTodos = async () => {
 };
 
 // ==========================
+// 'today' 카테고리에서 오늘 완료된 투두 가져오기
+// ==========================
+const getCompeletedTodayTodos = async (userId) => {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrowStart = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+  );
+
+  const query = {
+    author: userId,
+    category: 'today',
+    status: 'completed',
+    createdAt: { $gte: todayStart, $lt: tomorrowStart }, // 오�� 자정부터 다음 �� 자정 전까지
+  };
+
+  return await Todo.find(query).populate('author', 'name email');
+};
+
+// ==========================
 // 오늘 작성된 'today' 카테고리 데이터 검색
 // ==========================
 const searchTodayTodos = async (userId, category, search, filter) => {
@@ -154,6 +176,7 @@ const deleteTodo = async (id) => {
 // 모듈 내보내기
 // ==========================
 module.exports = {
+  getCompeletedTodayTodos,
   resetTodayTodos,
   searchTodayTodos,
   searchTodos,

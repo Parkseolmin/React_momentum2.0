@@ -8,8 +8,10 @@ import {
 } from 'react-icons/fc';
 import Loading from 'components/Loading/Loading';
 import styles from './DiaryDisplay.module.css';
+import { useSelector } from 'react-redux';
 
 export default function DiaryDisplay({ data, isLoading }) {
+  const user = useSelector((state) => state.user.user);
   return (
     <div className={styles.DiaryContainer}>
       {isLoading ? (
@@ -23,7 +25,7 @@ export default function DiaryDisplay({ data, isLoading }) {
           <div className={styles.CardContainer}>
             <div className={styles.CardTitle}>
               <FcPortraitMode style={{ marginRight: '6px' }} />
-              친구야,
+              {user.name}에게,
             </div>
             <div className={styles.CardContent}>{data.appraisal}</div>
           </div>

@@ -19,7 +19,9 @@ export default function TodoList({ category, filter }) {
   const error = useSelector((state) => state.todos.error);
   const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState('');
+  const user = useSelector((state) => state.user.user);
 
+  console.log('user', user);
   useEffect(() => {
     if (category === 'today') {
       dispatch(fetchTodayTodos({ category, filter, search }));
