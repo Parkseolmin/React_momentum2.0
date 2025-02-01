@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // 미들웨어 설정
 app.use(cors());
@@ -16,6 +16,9 @@ connectDB();
 
 // 라우트 설정
 app.use('/api', routes); // 모든 라우트를 /api에 연결
+app.get('/', (req, res) => {
+  res.send('🚀 Server is running successfully!');
+});
 
 // 에러 핸들링
 app.use(errorHandler);
