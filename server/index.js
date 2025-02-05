@@ -7,55 +7,22 @@ const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ 허용할 도메인 목록
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://web-react-momentum2-front-m6m4lqe82f54a44f.sel4.cloudtype.app',
-];
-
-// ✅ CORS 설정 (라우터보다 위에 위치)
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('❌ CORS 오류: 허용되지 않은 출처입니다.'));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-);
-
-// ✅ 프리플라이트 요청에 대한 수동 응답 처리
-app.use((req, res, next) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    allowedOrigins.includes(req.headers.origin) ? req.headers.origin : '*',
-  );
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200); // ✅ OPTIONS 요청에 대한 빠른 응답
-  }
-
-  next();
-});
-
+// 미들웨어 설정
+app.use(cors());
 app.use(express.json());
-connectDB();
-app.use('/api', routes);
 
+// MongoDB 연결
+connectDB();
+
+// 라우트 설정
+app.use('/api', routes); // 모든 라우트를 /api에 연결
 app.get('/', (req, res) => {
   res.send('🚀 Server is running successfully!');
 });
 
+// 에러 핸들링
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

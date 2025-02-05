@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL:
-    `${process.env.REACT_APP_BASE_URL}/api` || 'http://localhost:5000/api', // 기본값 설정
+  baseURL: 'http://localhost:5000/api', // 기본값 설정
   headers: {
     'Content-Type': 'application/json',
   },
