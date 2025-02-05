@@ -79,7 +79,11 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>로그인</h1>
+        <h1 className={styles.title}>
+          Hello!
+          <br />
+          What's your account?
+        </h1>
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <input

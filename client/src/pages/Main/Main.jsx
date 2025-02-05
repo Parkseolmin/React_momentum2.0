@@ -14,10 +14,24 @@ export default function Main() {
   const [currentPath, setCurrentPath] = useState(location.pathname); // 현재 페이지 경로
   const [isAnimating, setIsAnimating] = useState(false); // 로그인 후 배경 애니메이션
   const [isFadingOut, setIsFadingOut] = useState(false); // 페이지 사라짐 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // ✅ 로그인 상태 관리
 
   // Navbar를 숨기고 싶은 경로 목록
   const pathsWithoutNavbar = ['/login', '/register'];
   const hideNavbar = pathsWithoutNavbar.includes(location.pathname);
+
+  // ✅ 로그인 상태 확인
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token); // 토큰 존재 여부로 로그인 상태 설정
+  }, [location.pathname]); // 경로 변경 시마다 확인
+
+  // ✅ 로그아웃 처리 함수
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    setIsLoggedIn(false);
+    window.location.href = '/login'; // 로그아웃 후 로그인 페이지로 리디렉션
+  };
 
   // 로그인 후 배경 확대 애니메이션
   useEffect(() => {
@@ -57,6 +71,15 @@ export default function Main() {
 
       {/* 조건부로 Navbar 렌더링 */}
       {!hideNavbar && <Navbar />}
+
+      {isLoggedIn && (
+        <button
+          onClick={handleLogout}
+          style={{ position: 'absolute', bottom: 0, zIndex: 1000 }}
+        >
+          Logout
+        </button>
+      )}
 
       <DarkModeProvider>
         <TodosProvider>

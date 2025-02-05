@@ -178,6 +178,7 @@ header {
 }
 
 .siteNav ul li a span {
+  width: 58px;
   position: absolute;
   right: calc(100% + 0.5em);
   text-align: right;

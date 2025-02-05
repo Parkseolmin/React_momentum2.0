@@ -31,7 +31,7 @@ export default function RegisterPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>회원가입</h1>
+        <h1 className={styles.title}>Sign up</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type='text'
@@ -77,8 +77,8 @@ export default function RegisterPage() {
         </form>
         <p className={styles.login}>
           이미 계정이 있으신가요?{' '}
-          <span onClick={() => navigate('/')} className={styles.link}>
-            로그인
+          <span onClick={() => navigate('/login')} className={styles.link}>
+            Login
           </span>
         </p>
       </div>

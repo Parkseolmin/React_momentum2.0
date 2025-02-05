@@ -49,7 +49,7 @@ export default function TodoList({ category, filter }) {
       {category === 'today' && todos.length === 0 && (
         <div className={styles.popup}>
           <img
-            src='/images/momentum01.png' // 이미지 경로
+            src='/images/momentumLogo.png' // 이미지 경로
             alt='아무런 투두가 없습니다.'
             className={styles.popupImage}
           />

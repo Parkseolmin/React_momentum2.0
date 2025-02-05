@@ -11,7 +11,7 @@
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 32px;
+  padding: 30px 60px;
   max-width: 400px;
   width: 100%;
   text-align: center;
@@ -65,14 +65,14 @@
 .login {
   margin-top: 16px;
   font-size: 14px;
-  color: #666666;
+  color: #ffffff;
 }
 
 .link {
-  color: #007bff;
+  color: #ffffff;
   cursor: pointer;
   text-decoration: underline;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .link:hover {

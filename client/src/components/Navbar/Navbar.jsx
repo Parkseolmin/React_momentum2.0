@@ -8,9 +8,9 @@ import WeatherDisplay from 'components/Weather/WeatherDisplay';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const navItems = [
   { to: '/', text: 'Home', icon: 'ri-home-smile-line' },
-  { to: '/todo', text: 'List', icon: 'ri-quill-pen-line' },
+  { to: '/todo', text: 'To-Do', icon: 'ri-quill-pen-line' },
   { to: '/pomodoro', text: 'Timer', icon: 'ri-timer-2-line' },
-  { to: '/gpt', text: 'GPT', icon: 'ri-pulse-line' },
+  { to: '/gpt', text: 'GPT', icon: 'ri-chat-ai-line' },
 ];
 const queryClient = new QueryClient();
 export default function Navbar() {
