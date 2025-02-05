@@ -1,0 +1,45 @@
+name: 🚀 Deploy Frontend to Cloudtype
+
+on:
+  push:
+    branches:
+      - main # ✅ main 브랜치에 푸시될 때마다 실행
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: 🔑 Connect to Cloudtype
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+
+      - name: 🚀 Deploy Frontend (Client)
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: qkrtjfals2/react-momentum2-0
+          stage: main
+          yaml: |
+            name: react-momentum2-front
+            app: web
+            options:
+              nodeversion: "21"
+              build: npm run build
+              spa: true
+              install: npm install
+              buildenv:
+                - name: REACT_APP_BASE_URL
+                  value: https://port-0-react-momentum2-0-m6m4lqe82f54a44f.sel4.cloudtype.app
+              rewrites: []
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
+                path: client  # ✅ client 폴더를 배포
+              preset: react
