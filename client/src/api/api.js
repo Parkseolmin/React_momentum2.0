@@ -1,16 +1,19 @@
 import axios from 'axios';
 
-// ✅ baseURL 설정: 배포 환경과 로컬 환경 자동 감지
-const baseURL = process.env.REACT_APP_BASE_URL
+// ✅ 기본 및 대체 API 서버 주소
+const primaryBaseURL = process.env.REACT_APP_BASE_URL
   ? `${process.env.REACT_APP_BASE_URL}/api` // 배포된 환경
-  : 'http://localhost:5000/api'; // 로컬 환경
+  : 'http://localhost:5000/api'; // 로컬 환경 기본값
+
+const fallbackBaseURL = 'http://localhost:5000/api'; // 로컬 서버
 
 // ✅ 현재 연결된 서버 로그 출력
-console.log(`🌐 Axios Base URL: ${baseURL}`);
+console.log(`🌐 Primary Base URL: ${primaryBaseURL}`);
+console.log(`🌐 Fallback Base URL: ${fallbackBaseURL}`);
 
 // ✅ Axios 인스턴스 생성
 const api = axios.create({
-  baseURL: baseURL,
+  baseURL: primaryBaseURL, // 기본적으로 배포된 서버로 시작
   headers: {
     'Content-Type': 'application/json',
   },
@@ -41,7 +44,27 @@ api.interceptors.response.use(
     );
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // 🚨 요청이 실패하고 primaryBaseURL이 사용된 경우 로컬 서버로 재시도
+    if (
+      originalRequest.baseURL === primaryBaseURL &&
+      !originalRequest._retry &&
+      (!error.response || error.response.status >= 500)
+    ) {
+      console.warn(
+        '⚠️ [ERROR] Primary server failed. Retrying with local server...',
+      );
+      originalRequest._retry = true;
+      originalRequest.baseURL = fallbackBaseURL; // 로컬 서버로 전환
+      console.log(
+        '🔄 [RETRY] Switching to:',
+        fallbackBaseURL + originalRequest.url,
+      );
+      return api(originalRequest); // 로컬 서버로 재시도
+    }
+
     console.error('❌ [RESPONSE ERROR]:', error);
     return Promise.reject(error);
   },
