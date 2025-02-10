@@ -1,44 +1,41 @@
-name: 🚀 Deploy Server to Cloudtype
-
+name: Deploy to cloudtype
 on:
   push:
     branches:
-      - main # ✅ main 브랜치에 푸시될 때마다 실행
-
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: 🔑 Connect to Cloudtype
+      - name: Connect deploy key
         uses: cloudtype-github-actions/connect@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
-
-      - name: 🚀 Deploy Backend (Server)
+      - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: qkrtjfals2/react-momentum2-0-server
+          project: qkrtjfals2/react-momentum2-0
           stage: main
-          yaml: |
+          yaml: >
             name: react-momentum2-0-server
+
             app: node@21
+
             options:
               ports: "5000"
               install: npm ci
               start: node index.js
               env:
                 - name: MONGO_DEPLOYMENT_URI
-                  value: mongodb+srv://username:password@cluster.mongodb.net/todos
+                  value: mongodb+srv://qoavkdl3:qkr1tjf2als3@cluster0.4tqb5vv.mongodb.net/todos
                 - name: ACCESS_TOKEN_SECRET
                   value: mySecretKey
                 - name: REFRESH_TOKEN_SECRET
-                  value: myRefreshKey
+                  value: myRefeshKey
                 - name: PORT
                   value: "5000"
               buildenv: []
