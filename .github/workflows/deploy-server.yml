@@ -21,7 +21,7 @@ jobs:
           project: qkrtjfals2/react-momentum2-0
           stage: main
           yaml: >
-            name: react-momentum2-0-server
+            name: react-momentum2-0
 
             app: node@21
 
