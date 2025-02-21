@@ -73,10 +73,7 @@ export default function Main() {
       {!hideNavbar && <Navbar />}
 
       {isLoggedIn && (
-        <button
-          onClick={handleLogout}
-          style={{ position: 'absolute', bottom: 0, zIndex: 1000 }}
-        >
+        <button onClick={handleLogout} className='logoutButton'>
           Logout
         </button>
       )}

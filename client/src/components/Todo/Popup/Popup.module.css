@@ -1,0 +1,59 @@
+/* 팝업 전체 배경 (모달 효과) */
+.popupContainer {
+  position: fixed; /* 화면 고정 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 반투명 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* 가장 위에 표시 */
+}
+
+/* 팝업 박스 */
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out; /* 팝업 애니메이션 */
+}
+
+/* 경고 메시지 */
+.popup p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* 닫기 버튼 */
+.popup button {
+  background: #ff4d4d; /* 빨간색 버튼 */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popup button:hover {
+  background: #cc0000; /* 호버 시 어두운 빨간색 */
+}
+
+/* 팝업 애니메이션 효과 */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

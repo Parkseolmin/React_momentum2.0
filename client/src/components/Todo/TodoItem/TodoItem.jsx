@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './TodoItem.module.css';
 import { LuDelete } from 'react-icons/lu';
+
 export default function Todo({
   todo,
   onUpdate,
@@ -12,7 +13,6 @@ export default function Todo({
 
   const [editText, setEditText] = useState(text); // 수정 중인 텍스트
   const [editStatus, setEditStatus] = useState(status); // 수정 중인 상태
-
   const handleDelete = () => {
     onDelete(todo);
   };
@@ -49,6 +49,7 @@ export default function Todo({
       listItemRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [todo]);
+
   return (
     // <li className={styles.todo} ref={listItemRef}>
     //   <input

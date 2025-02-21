@@ -59,8 +59,22 @@
   background: #787878;
 }
 
+.gestBtn {
+  margin-top: 10px;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.gestBtn:hover {
+  color: #c9c9c9;
+}
+
 .error {
-  color: #ff8a80;
+  color: #83d1dd;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
@@ -80,5 +94,5 @@
 }
 
 .link:hover {
-  color: #787878;
+  color: #c9c9c9;
 }

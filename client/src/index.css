@@ -170,6 +170,21 @@ button.with-text svg {
   display: none;
 }
 
+.logoutButton {
+  padding: 10px 10px; /* 내부 여백 */
+  font-size: 16px; /* 글자 크기 */
+  color: white; /* 글자 색상 */
+  cursor: pointer; /* 클릭 가능하도록 */
+  transition: background 0.3s ease-in-out; /* 부드러운 효과 */
+  z-index: 10000;
+  position: absolute;
+  bottom: 15px;
+}
+
+.logoutButton:hover {
+  color: #a0a0a0;
+}
+
 @media screen and (max-width: 500px) {
   .playbtn {
     width: 3.5rem;

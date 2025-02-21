@@ -47,15 +47,8 @@ export default function LoginPage() {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!email || !password) {
-      setError('모든 필드를 입력해주세요.');
-      playSound('error'); // 실패 알람음
-      return;
-    }
-
+  // 공통 로그인 로직
+  const handleLogin = async ({ email, password }) => {
     try {
       const response = await api.post('/user/login', { email, password });
       if (response.status === 200) {
@@ -74,6 +67,24 @@ export default function LoginPage() {
       );
       playSound('error'); // 실패 알람음
     }
+  };
+
+  // 사용자 입력 기반 로그인
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!email || !password) {
+      setError('모든 필드를 입력해주세요.');
+      playSound('error'); // 실패 알람음
+      return;
+    }
+
+    handleLogin({ email, password });
+  };
+
+  // 게스트 계정으로 로그인
+  const handleGuestLogin = () => {
+    handleLogin({ email: 'guest@example.com', password: 'password123' });
   };
 
   return (
@@ -110,6 +121,9 @@ export default function LoginPage() {
             회원가입
           </span>
         </p>
+        <button onClick={handleGuestLogin} className={styles.gestBtn}>
+          체험하기
+        </button>
       </div>
     </div>
   );

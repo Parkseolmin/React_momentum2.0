@@ -188,6 +188,7 @@ header {
   z-index: -1;
   transform: translateX(50px);
   transition: color 0.3s, transform 0.3s 0.4s, opacity 0.2s 0.4s;
+  color: white;
 }
 
 .siteNav > input:checked ~ ul li a span {
@@ -211,7 +212,7 @@ header {
 }
 
 .siteNav ul li a:hover span {
-  color: white;
+  color: #acacac;
 }
 
 .siteNav ul li:nth-child(4) a i {

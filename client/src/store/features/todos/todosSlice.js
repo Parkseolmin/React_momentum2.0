@@ -115,12 +115,16 @@ const todosSlice = createSlice({
     byCategory: {
       today: [], // "오늘" 할 일
       work: [], // "작업" 할 일
-      completedToday: [], // '오늘 완료된' 할 ㅇ;ㄹㄹ
+      completedToday: [], // '오늘 완료된' 할 일;
     },
     loading: false, // 로딩 상태
     error: null, // 에러 메시지
   },
-  reducers: {}, // 동기적인 리듀서(필요 시 추가)
+  reducers: {
+    clearError: (state) => {
+      state.error = null; // ✅ 에러 상태 초기화
+    },
+  }, // 동기적인 리듀서(필요 시 추가)
   extraReducers: (builder) => {
     builder
       // ====== fetchCompeletedTodayTodos 처리 ======
@@ -147,7 +151,11 @@ const todosSlice = createSlice({
       })
       .addCase(fetchTodayTodos.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // state.error = action.payload;
+        state.error =
+          typeof action.payload === 'string'
+            ? action.payload
+            : action.payload?.error || 'Failed to fetch todos';
       })
       // ====== fetchTodos 처리 ======
       .addCase(fetchTodos.pending, (state) => {
@@ -160,7 +168,11 @@ const todosSlice = createSlice({
       })
       .addCase(fetchTodos.rejected, (state, action) => {
         state.loading = false; // 로딩 상태 비활성화
-        state.error = action.payload; // 에러 저장
+        // state.error = action.payload; // 에러 저장
+        state.error =
+          typeof action.payload === 'string'
+            ? action.payload
+            : action.payload?.error || 'Failed to fetch todos';
       })
 
       // ====== addTodo 처리 ======
@@ -175,7 +187,11 @@ const todosSlice = createSlice({
       })
       .addCase(addTodo.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        // state.error = action.payload;
+        state.error =
+          typeof action.payload === 'string'
+            ? action.payload // 이미 문자열일 경우 그대로 사용
+            : action.payload?.error || 'An unexpected error occurred.'; // 객체에서 메시지 추출
       })
 
       // ====== updateTodo 처리 ======
@@ -214,5 +230,5 @@ const todosSlice = createSlice({
       });
   },
 });
-
+export const { clearError } = todosSlice.actions;
 export default todosSlice.reducer;

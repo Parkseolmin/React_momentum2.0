@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from 'components/Todo/Header/Header';
 import Tab from 'components/Todo/Tab/Tab';
+import { useSelector } from 'react-redux';
+import Popup from 'components/Todo/Popup/Popup';
 
 export default function TodoPage() {
   const filters = ['all', 'active', 'completed'];
@@ -11,7 +13,10 @@ export default function TodoPage() {
   const [filterWork, setFilterWork] = useState(filters[0]);
   const [activeTab, setActiveTab] = useState('Today');
   // const [filter, setFilter] = useState(filters[0]);
-
+  const user1 = useSelector((state) => state.user);
+  const user2 = useSelector((state) => state.user.user);
+  console.log('user1::', user1);
+  console.log('user2::', user2);
   return (
     <>
       <Helmet>
@@ -21,6 +26,7 @@ export default function TodoPage() {
           href='https://react-momentum-one.vercel.app/todo'
         />
       </Helmet>
+      <Popup />
       <section className={styles.todoContainer}>
         {/* 탭 버튼 */}
         <Tab setActiveTab={setActiveTab} />
