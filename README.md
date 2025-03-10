@@ -3,7 +3,7 @@
 <div align="center"><img src="https://github.com/user-attachments/assets/dabc9eec-22c3-4e25-960f-d5254860e7fd" alt="Momentum 이미지" width="300"/></div>
 
 <p align="center">
-<a href="https://web-react-momentum2-front-m6m4lqe82f54a44f.sel4.cloudtype.app" target="_blank"><b>🚀 배포 URL : [https://momentum-fullstack.vercel.app](https://web-react-momentum2-front-m6m4lqe82f54a44f.sel4.cloudtype.app)</b></a>
+<a href="https://web-react-momentum2-front-m6m4lqe82f54a44f.sel4.cloudtype.app" target="_blank"><b>🚀 배포 사이트 가기</b></a>
 </p>
 
 ---
