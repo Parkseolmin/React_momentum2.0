@@ -24,7 +24,7 @@
     <img src="https://github.com/user-attachments/assets/d9cfa7f6-e22b-4aa7-beea-3082dfccf1d2" alt="main 페이지" width="91%">
 </div>
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/e71af24f-3264-4f06-8117-3436215fe84f" alt="pomodoro 페이지" width="45%">
+    <img src="https://github.com/user-attachments/assets/480ff48f-e5f6-4023-902f-7bdf98504f24" alt="pomodoro 페이지" width="45%">
     <img src="https://github.com/user-attachments/assets/8d23564e-9189-4a5d-a1cb-0fcd8506413a" alt="gpt 페이지" width="45%">
 </div>
 <br>
