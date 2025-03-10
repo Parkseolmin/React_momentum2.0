@@ -117,9 +117,9 @@ POST   /api/todos         # 새 투두 생성
 PUT    /api/todos/:id     # 특정 투두 업데이트
 DELETE /api/todos/:id     # 특정 투두 삭제
 
-POST   /api/auth/signup   # 회원가입
-POST   /api/auth/login    # 로그인
-GET    /api/auth/user     # 현재 로그인된 사용자 정보 가져오기
+POST   /api/user          # 회원가입
+POST   /api/user/login    # 로그인
+GET    /api/user/me       # 현재 로그인된 사용자 정보 가져오기
 ```
 
 ## **📌버전 정보**
