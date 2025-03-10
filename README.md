@@ -28,7 +28,7 @@
     <img src="https://github.com/user-attachments/assets/8d23564e-9189-4a5d-a1cb-0fcd8506413a" alt="gpt 페이지" width="45%">
 </div>
 <br>
-**Momentum Fullstack**은 기존 Momentum 프로젝트를 확장하여 **백엔드를 추가한 풀스택 애플리케이션**입니다.  
+React_momentum2.0은 기존 Momentum 프로젝트를 확장하여 백엔드를 추가한 풀스택 애플리케이션입니다.  
 사용자의 생산성을 높이기 위한 다양한 기능을 제공하며, Express 기반의 RESTful API 및 MongoDB를 활용하여 데이터를 영속적으로 관리할 수 있도록 개선되었습니다.  
 
 ---
@@ -98,15 +98,16 @@ node index.js
 프로젝트 루트 디렉토리에 .env 파일을 생성하고, API 키 및 설정을 추가합니다.
 ```bash
 # 프론트엔드 환경 변수 (client/.env)
-REACT_APP_UNSPLASH_API=your_unsplash_api_key
-REACT_APP_WEATHER_API=your_openweathermap_api_key
-REACT_APP_GPT_KEY=your_gpt_api_key
-REACT_APP_BACKEND_URL=http://localhost:5000
+REACT_APP_UNSPLASH_API_KEY=your_unsplash_api_key
+REACT_APP_OPENWEATHERMAP_API_KEY=your_openweathermap_api_key
+REACT_APP_OPENAI_API_KEY=your_gpt_api_key
+REACT_APP_BASE_URL=http://localhost:5000
 
 # 백엔드 환경 변수 (server/.env)
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-CORS_ORIGIN=http://localhost:3000
+MONGO_DEPLOYMENT_URI=your_mongodb_connection_string
+ACCESS_TOKEN_SECRET=your_jwt_secret
+REFRESH_TOKEN_SECRET=your_jwt_refresh
+PORT=5000
 ```
 
 ## **📜API 문서**
