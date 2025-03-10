@@ -79,8 +79,8 @@
 ## **🚀설치 및 실행**
 ### **1️⃣ 프로젝트 클론**
 ```bash
-git clone https://github.com/Parkseolmin/React_Fullstack_Momentum.git
-cd React_Fullstack_Momentum
+git clone https://github.com/Parkseolmin/React_momentum2.0.git
+cd React_momentum2.0
 ```
 ### **2️⃣ 프로젝트 클론**
 ```bash
@@ -92,7 +92,7 @@ npm start
 ```bash
 cd server
 npm install
-npm start
+node index.js
 ```
 ### **4️⃣ 환경 변수 설정**
 프로젝트 루트 디렉토리에 .env 파일을 생성하고, API 키 및 설정을 추가합니다.
