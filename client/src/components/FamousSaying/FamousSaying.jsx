@@ -1,5 +1,5 @@
 import Loading from 'components/Loading/Loading';
-import useFamousSaying from 'hooks/useFamousSaying ';
+import useFamousSaying from 'hooks/useFamousSaying';
 import styles from './FamousSaying.module.css';
 export default function FamousSaying() {
   const { data, isLoading, fetchSayingManually } = useFamousSaying();
