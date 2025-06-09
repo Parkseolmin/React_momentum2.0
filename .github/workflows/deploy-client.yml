@@ -39,7 +39,7 @@ jobs:
               rewrites: []
             context:
               git:
-                url: git@github.com:${{ github.repository }}.git
+                url: https://github.com/${{ github.repository }}.git
                 ref: ${{ github.ref }}
                 path: client  # ✅ client 폴더를 배포
               preset: react
