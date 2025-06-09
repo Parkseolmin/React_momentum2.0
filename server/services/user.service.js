@@ -6,7 +6,6 @@ require('dotenv').config();
 // 새로운 사용자 생성 (회원가입)
 const createUser = async (userData) => {
   const { email, name, password } = userData;
-  console.log('password는 암호화 전 상태:', password);
   // 이메일 중복 확인
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -17,7 +16,6 @@ const createUser = async (userData) => {
 
   // 새로운 사용자 생성
   const newUser = await User.create({ email, name, password }); // 비밀번호 암호화는 User 모델의 pre('save')에서 처리됨
-  console.log('password는 암호화 후 상태:', newUser.password);
 
   // 생성된 사용자 정보 반환
   return { id: newUser.id, name: newUser.name, email: newUser.email };
