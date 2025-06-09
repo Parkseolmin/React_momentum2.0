@@ -32,11 +32,11 @@ jobs:
                 - name: REACT_APP_BASE_URL
                   value: https://port-0-react-momentum2-0-m6m4lqe82f54a44f.sel4.cloudtype.app
                 - name: REACT_APP_UNSPLASH_API_KEY
-                  value: GaNyttec4kQGjZi4T6ABdAspnB3sG-rJ6rnjhbbKSGk
+                  value: ${{ secrets.REACT_APP_UNSPLASH_API_KEY }}
                 - name: REACT_APP_OPENWEATHERMAP_API_KEY
-                  value: 1da06cfba173e394bacde6d9fe4a796f
+                  value: ${{ secrets.REACT_APP_OPENWEATHERMAP_API_KEY }}
                 - name: REACT_APP_OPENAI_API_KEY
-                  value: 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
+                  value: ${{ secrets.REACT_APP_OPENAI_API_KEY }}
               rewrites: []
             context:
               git:
