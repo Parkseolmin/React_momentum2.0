@@ -30,6 +30,8 @@ jobs:
               install: npm ci
               start: node index.js
               env:
+                - name: MONGO_URI
+                  value: "mongodb://localhost:27017/todos "
                 - name: MONGO_DEPLOYMENT_URI
                   value: mongodb+srv://qoavkdl3:qkr1tjf2als3@cluster0.4tqb5vv.mongodb.net/todos
                 - name: ACCESS_TOKEN_SECRET
@@ -41,6 +43,5 @@ jobs:
               buildenv: []
             context:
               git:
-                url: https://github.com/${{ github.repository }}.git
+                url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
-                path: server  # ✅ server 폴더를 배포

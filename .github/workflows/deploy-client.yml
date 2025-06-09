@@ -1,45 +1,45 @@
-name: 🚀 Deploy Frontend to Cloudtype
-
+name: Deploy to cloudtype
 on:
   push:
     branches:
-      - main # ✅ main 브랜치에 푸시될 때마다 실행
-
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: 🔑 Connect to Cloudtype
+      - name: Connect deploy key
         uses: cloudtype-github-actions/connect@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           ghtoken: ${{ secrets.GHP_TOKEN }}
-
-      - name: 🚀 Deploy Frontend (Client)
+      - name: Deploy
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
           project: qkrtjfals2/react-momentum2-0
           stage: main
-          yaml: |
-            name: react-momentum2-front
+          yaml: >
+            name: react-momentum2-0-client
+
             app: web
+
             options:
               nodeversion: "21"
-              build: npm run build
               spa: true
-              install: npm install
               buildenv:
                 - name: REACT_APP_BASE_URL
                   value: https://port-0-react-momentum2-0-m6m4lqe82f54a44f.sel4.cloudtype.app
+                - name: REACT_APP_UNSPLASH_API_KEY
+                  value: GaNyttec4kQGjZi4T6ABdAspnB3sG-rJ6rnjhbbKSGk
+                - name: REACT_APP_OPENWEATHERMAP_API_KEY
+                  value: 1da06cfba173e394bacde6d9fe4a796f
+                - name: REACT_APP_OPENAI_API_KEY
+                  value: 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
               rewrites: []
             context:
               git:
-                url: https://github.com/${{ github.repository }}.git
+                url: git@github.com:${{ github.repository }}.git
                 ref: ${{ github.ref }}
-                path: client  # ✅ client 폴더를 배포
               preset: react
