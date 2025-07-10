@@ -47,7 +47,37 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 🚨 요청이 실패하고 primaryBaseURL이 사용된 경우 로컬 서버로 재시도
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        try {
+          const res = await api.post('/user/refresh', { refreshToken });
+          const { accessToken, refreshToken: newRefreshToken } = res.data;
+
+          localStorage.setItem('accessToken', accessToken);
+          if (newRefreshToken) {
+            localStorage.setItem('refreshToken', newRefreshToken);
+          }
+
+          api.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${accessToken}`;
+          originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+
+          return api(originalRequest);
+        } catch (err) {
+          console.error('❌ [TOKEN REFRESH ERROR]:', err);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+        }
+      }
+    }
+
     if (
       originalRequest.baseURL === primaryBaseURL &&
       !originalRequest._retry &&
@@ -57,12 +87,12 @@ api.interceptors.response.use(
         '⚠️ [ERROR] Primary server failed. Retrying with local server...',
       );
       originalRequest._retry = true;
-      originalRequest.baseURL = fallbackBaseURL; // 로컬 서버로 전환
+      originalRequest.baseURL = fallbackBaseURL;
       console.log(
         '🔄 [RETRY] Switching to:',
         fallbackBaseURL + originalRequest.url,
       );
-      return api(originalRequest); // 로컬 서버로 재시도
+      return api(originalRequest);
     }
 
     console.error('❌ [RESPONSE ERROR]:', error);
