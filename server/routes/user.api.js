@@ -9,5 +9,6 @@ router.get('/me', authMiddleware, userController.getUser);
 // 로그인, 계정 생성
 router.post('/login', userController.loginWithEmail);
 router.post('/', userController.createUser);
+router.post('/refresh', userController.refreshToken);
 
 module.exports = router;
