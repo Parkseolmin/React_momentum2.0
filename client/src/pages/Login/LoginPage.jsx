@@ -53,7 +53,13 @@ export default function LoginPage() {
       const response = await api.post('/user/login', { email, password });
       if (response.status === 200) {
         const { user: userData, tokens } = response.data;
-        dispatch(setUser({ user: userData, token: tokens.accessToken })); // Redux 상태에 사용자 정보 저장
+        dispatch(
+          setUser({
+            user: userData,
+            token: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          }),
+        ); // Redux 상태에 사용자 정보 저장
 
         // Redux 상태 저장 후 성공 알람 재생 및 리디렉션
         playSound('success', () => navigate('/')); // 성공 알람 재생 후 리디렉션

@@ -52,7 +52,7 @@ const loginWithEmail = async (email, password) => {
   const accessToken = jwt.sign(
     { userId: user._id, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '5s' },
+    { expiresIn: '15m' },
   );
 
   const refreshToken = jwt.sign(

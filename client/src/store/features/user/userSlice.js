@@ -29,10 +29,14 @@ const userSlice = createSlice({
       if (action.payload.token) {
         localStorage.setItem('accessToken', action.payload.token); // 토큰 저장
       }
+      if (action.payload.refreshToken) {
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+      }
     },
     clearUser: (state) => {
       state.user = null; // 사용자 정보 초기화
       localStorage.removeItem('accessToken'); // 토큰 삭제
+      localStorage.removeItem('refreshToken');
     },
   },
   extraReducers: (builder) => {

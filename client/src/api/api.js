@@ -1,101 +1,94 @@
 import axios from 'axios';
 
-// ✅ 기본 및 대체 API 서버 주소
 const primaryBaseURL = process.env.REACT_APP_BASE_URL
-  ? `${process.env.REACT_APP_BASE_URL}/api` // 배포된 환경
-  : 'http://localhost:5000/api'; // 로컬 환경 기본값
+  ? `${process.env.REACT_APP_BASE_URL}/api`
+  : 'http://localhost:5000/api';
 
-const fallbackBaseURL = 'http://localhost:5000/api'; // 로컬 서버
+const fallbackBaseURL = 'http://localhost:5000/api';
 
-// ✅ 현재 연결된 서버 로그 출력
 console.log(`🌐 Primary Base URL: ${primaryBaseURL}`);
 console.log(`🌐 Fallback Base URL: ${fallbackBaseURL}`);
 
-// ✅ Axios 인스턴스 생성
+// 요청용 인스턴스
 const api = axios.create({
-  baseURL: primaryBaseURL, // 기본적으로 배포된 서버로 시작
+  baseURL: primaryBaseURL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// ✅ 요청 인터셉터: 토큰 추가 및 요청 로깅
+// refresh 요청만 담당하는 인스턴스
+const plainAxios = axios.create();
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
-    console.log('🚀 [REQUEST] Sending to:', config.baseURL + config.url); // 요청 주소 출력
+    console.log(
+      '🚀 [REQUEST]',
+      config.method?.toUpperCase(),
+      config.baseURL + config.url,
+    );
     return config;
   },
   (error) => {
-    console.error('❌ [REQUEST ERROR]:', error);
+    console.error('❌ [REQUEST ERROR]', error);
     return Promise.reject(error);
   },
 );
 
-// ✅ 응답 인터셉터: 응답 로깅 및 에러 처리
 api.interceptors.response.use(
   (response) => {
-    console.log(
-      '✅ [RESPONSE] From:',
-      response.config.baseURL + response.config.url,
-    );
+    console.log('✅ [RESPONSE]', response.status, response.config.url);
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      console.warn('🔁 [INTERCEPTOR] AccessToken 만료됨, Refresh 시도 중...');
+
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem('refreshToken');
+
       if (refreshToken) {
         try {
-          const res = await api.post('/user/refresh', { refreshToken });
-          const { accessToken, refreshToken: newRefreshToken } = res.data;
+          const res = await plainAxios.post(`${primaryBaseURL}/user/refresh`, {
+            refreshToken,
+          });
+
+          const { accessToken, refreshToken: newRefresh } = res.data;
 
           localStorage.setItem('accessToken', accessToken);
-          if (newRefreshToken) {
-            localStorage.setItem('refreshToken', newRefreshToken);
+          if (newRefresh) {
+            localStorage.setItem('refreshToken', newRefresh);
           }
 
+          // 헤더 갱신
           api.defaults.headers.common[
             'Authorization'
           ] = `Bearer ${accessToken}`;
           originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
 
+          console.log('🔓 [REFRESH SUCCESS] 토큰 갱신 완료! 요청 재시도 중...');
           return api(originalRequest);
-        } catch (err) {
-          console.error('❌ [TOKEN REFRESH ERROR]:', err);
+        } catch (refreshError) {
+          console.error('❌ [REFRESH FAILED]', refreshError);
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
+          // 여기서 redirect('/login') 또는 reject
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 100);
+          return Promise.reject(refreshError);
         }
       }
     }
 
-    if (
-      originalRequest.baseURL === primaryBaseURL &&
-      !originalRequest._retry &&
-      (!error.response || error.response.status >= 500)
-    ) {
-      console.warn(
-        '⚠️ [ERROR] Primary server failed. Retrying with local server...',
-      );
-      originalRequest._retry = true;
-      originalRequest.baseURL = fallbackBaseURL;
-      console.log(
-        '🔄 [RETRY] Switching to:',
-        fallbackBaseURL + originalRequest.url,
-      );
-      return api(originalRequest);
-    }
+    console.error('❌ [RESPONSE ERROR]', error);
 
-    console.error('❌ [RESPONSE ERROR]:', error);
     return Promise.reject(error);
   },
 );
