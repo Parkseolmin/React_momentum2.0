@@ -1,36 +1,43 @@
 import Loading from 'components/Loading/Loading';
 import Navbar from 'components/Navbar/Navbar';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useBackgroundImage } from 'hooks/useBackgroundImage';
 import { TodosProvider } from 'context/TodosContext';
 import { DarkModeProvider } from 'context/DarkModeContext';
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutAsync } from 'store/features/user/userSlice';
 
 export default function Main() {
   const { isLoading, error, backgroundImageUrl } = useBackgroundImage();
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux 상태로 로그인 여부 판단 (중복 로컬 상태 제거)
+  const isLoggedIn = useSelector((state) => !!state.auth.user);
 
   const [currentPath, setCurrentPath] = useState(location.pathname); // 현재 페이지 경로
   const [isAnimating, setIsAnimating] = useState(false); // 로그인 후 배경 애니메이션
   const [isFadingOut, setIsFadingOut] = useState(false); // 페이지 사라짐 상태
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // ✅ 로그인 상태 관리
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); // ✅ 로그인 상태 관리
 
   // Navbar를 숨기고 싶은 경로 목록
   const pathsWithoutNavbar = ['/login', '/register'];
   const hideNavbar = pathsWithoutNavbar.includes(location.pathname);
 
   // ✅ 로그인 상태 확인
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setIsLoggedIn(!!token); // 토큰 존재 여부로 로그인 상태 설정
-  }, [location.pathname]); // 경로 변경 시마다 확인
+  // useEffect(() => {
+  //   const token = localStorage.getItem('accessToken');
+  //   setIsLoggedIn(!!token); // 토큰 존재 여부로 로그인 상태 설정
+  // }, [location.pathname]); // 경로 변경 시마다 확인
 
-  // ✅ 로그아웃 처리 함수
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    setIsLoggedIn(false);
-    window.location.href = '/login'; // 로그아웃 후 로그인 페이지로 리디렉션
+  // ✅ 로그아웃 처리 함수 (서버 통보 + 로컬 정리 + 이동)
+  const handleLogout = async () => {
+    dispatch(logoutAsync()).finally(() =>
+      navigate('/login', { replace: true }),
+    );
   };
 
   // 로그인 후 배경 확대 애니메이션
@@ -49,10 +56,11 @@ export default function Main() {
       setIsFadingOut(true);
 
       // 애니메이션 종료 후 경로 변경
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setIsFadingOut(false);
         setCurrentPath(location.pathname);
       }, 300); // 500ms는 CSS에서 정의한 트랜지션 시간
+      return () => clearTimeout(timer);
     }
   }, [location.pathname, currentPath]);
 

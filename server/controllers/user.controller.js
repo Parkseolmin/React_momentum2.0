@@ -17,6 +17,13 @@ userController.loginWithEmail = asyncHandler(async (req, res) => {
   res.status(200).json({ status: 'success', user, tokens });
 });
 
+// 로그아웃(B안): 유효한 accessToken이어야 서버 정리가 가능
+userController.logout = asyncHandler(async (req, res) => {
+  const { userId } = req.user;
+  await userService.revokeAllRefreshToken(userId);
+  return res.status(204).send();
+});
+
 // 사용자 정보 조회
 userController.getUser = asyncHandler(async (req, res) => {
   const { userId } = req.user; // 인증 미들웨어로부터 전달된 userId

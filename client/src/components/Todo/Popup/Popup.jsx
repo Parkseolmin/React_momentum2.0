@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styles from './Popup.module.css';
 
 export default function Popup() {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
   const [isPopupOpen, setIsPopupOpen] = useState(user?.name === '게스트'); // ✅ 초기 상태: 게스트면 true
 
   if (!isPopupOpen) return null; // 🔥 팝업이 닫혀 있으면 아무것도 렌더링하지 않음

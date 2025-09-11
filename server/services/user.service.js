@@ -5,14 +5,14 @@ require('dotenv').config();
 
 const { redisClient } = require('../config/redis');
 
-// Refresh Token을 Redis에 저장
+// === Redis: RefreshToken 저장 ===
 const addRefreshToken = async (userId, token) => {
   const TTL = 60 * 60 * 24 * 7; // 7일
   const key = `refreshToken:${userId}:${token}`;
   await redisClient.set(key, userId.toString(), 'EX', TTL);
 };
 
-// Refresh Token 유효성 검사
+// === Redis: RefreshToken 존재 확인 ===
 const isRefreshTokenValid = async (userId, token) => {
   const key = `refreshToken:${userId}:${token}`;
   const exists = await redisClient.exists(key);
@@ -122,9 +122,23 @@ const refreshAccessToken = async (oldRefreshToken) => {
   }
 };
 
+const revokeAllRefreshToken = async (userId) => {
+  const pattern = `refreshToken:${userId}:*`;
+
+  // 메모리 과점 방지를 위한 scanIterator 사용
+  const iter = redisClient.scanIterator({ MATCH: pattern, COUNT: 100 });
+
+  const pipe = redisClient.multi();
+  for await (const key of iter) {
+    pipe.del(key);
+  }
+  await pipe.exec();
+};
+
 module.exports = {
   createUser,
   loginWithEmail,
   getUserById,
   refreshAccessToken,
+  revokeAllRefreshToken,
 };

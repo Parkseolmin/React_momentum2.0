@@ -5,7 +5,7 @@ import { restoreUser } from './features/user/userSlice';
 import Loading from 'components/Loading/Loading';
 
 export default function AuthProvider({ children }) {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -16,6 +16,7 @@ app.use(
       'https://web-react-momentum2-0-client-m6m4lqe82f54a44f.sel4.cloudtype.app/',
     ],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-skip-refresh'],
   }),
 );
 

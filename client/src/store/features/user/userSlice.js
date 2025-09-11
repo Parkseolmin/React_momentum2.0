@@ -1,49 +1,73 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from 'api/api';
 
+// 공통 정리 유틸
+const clearAuth = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+};
+
 // 사용자 복원 비동기 액션 (Zustand의 restoreUser 대체)
 export const restoreUser = createAsyncThunk(
   'user/restoreUser',
   async (_, thunkAPI) => {
     try {
       const response = await api.get('/user/me'); // 서버에서 사용자 정보 가져오기
-      return response.data; // 성공 시 user 데이터 반환
+      return response.data; // 서버가 주는 유저 객체 { id, name, email }
     } catch (err) {
-      localStorage.removeItem('accessToken'); // 실패 시 토큰 삭제
-      return thunkAPI.rejectWithValue(err.message); // 에러 처리
+      clearAuth();
+      return thunkAPI.rejectWithValue(err?.response?.data || 'restore failed'); // 에러 처리
+    }
+  },
+);
+
+// 로그아웃 : 이 요청에는 x-skip-refresh 헤더를 달아 리프레시를 막는다.
+export const logoutAsync = createAsyncThunk(
+  'user/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post(
+        '/user/logout',
+        { refreshToken: localStorage.getItem('refreshToken') },
+        { headers: { 'x-skip-refresh': '1' } },
+      );
+      return true;
+    } catch (err) {
+      // 서버 실패해도 클라이언트 정리는 해야해서 reject로 넘김
+      return rejectWithValue(err?.response?.data || 'logout failed');
+    } finally {
+      // 스토리지 정리의 단일 책임지점
+      clearAuth();
     }
   },
 );
 
 // 사용자 상태 관리 슬라이스 정의
 const userSlice = createSlice({
-  name: 'user',
+  name: 'auth',
   initialState: {
-    user: null, // 사용자 정보
-    status: 'idle', // 요청 상태: idle, loading, succeeded, failed
+    user: null, // { id, name, email }
+    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null, // 에러 메시지
   },
   reducers: {
+    // 순수 상태 업데이트 (토큰 저장 x)
     setUser: (state, action) => {
-      state.user = action.payload.user; // 사용자 정보 저장
-      if (action.payload.token) {
-        localStorage.setItem('accessToken', action.payload.token); // 토큰 저장
-      }
-      if (action.payload.refreshToken) {
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
-      }
+      // 정규화 : payload가 { user: {...} }든 {...}든 평평한 유저 데이터객체 }
+      state.user = action.payload?.user ?? action.payload; // { id, name, email }
+      console.log('setUser 페이로드 값 상태를 보자 : ', action.payload);
     },
     clearUser: (state) => {
-      state.user = null; // 사용자 정보 초기화
-      localStorage.removeItem('accessToken'); // 토큰 삭제
-      localStorage.removeItem('refreshToken');
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
     builder
+      // 복원
       .addCase(restoreUser.pending, (state) => {
         console.log('restoreUser 요청 중...');
         state.status = 'loading';
+        state.error = null;
       })
       .addCase(restoreUser.fulfilled, (state, action) => {
         console.log('restoreUser 성공:', action.payload); // 응답 데이터 확인
@@ -53,7 +77,15 @@ const userSlice = createSlice({
       .addCase(restoreUser.rejected, (state, action) => {
         console.log('restoreUser 실패:', action.payload);
         state.status = 'failed';
-        state.error = action.payload; // 에러 메시지 저장
+        state.error = action.payload || 'restore failed'; // 에러 메시지 저장
+      })
+
+      // 로그아웃 성공/실패 모두 로컬 정리
+      .addCase(logoutAsync.fulfilled, (state) => {
+        state.user = null;
+      })
+      .addCase(logoutAsync.rejected, (state) => {
+        state.user = null; // 서버 실패여도 클라 상태는 정리
       });
   },
 });

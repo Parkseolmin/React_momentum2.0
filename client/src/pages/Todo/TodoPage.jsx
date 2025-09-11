@@ -13,8 +13,8 @@ export default function TodoPage() {
   const [filterWork, setFilterWork] = useState(filters[0]);
   const [activeTab, setActiveTab] = useState('Today');
   // const [filter, setFilter] = useState(filters[0]);
-  const user1 = useSelector((state) => state.user);
-  const user2 = useSelector((state) => state.user.user);
+  const user1 = useSelector((state) => state.auth);
+  const user2 = useSelector((state) => state.auth.user);
   console.log('user1::', user1);
   console.log('user2::', user2);
   return (
