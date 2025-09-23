@@ -17,6 +17,7 @@
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "korean-regexp": "^1.0.13",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.9.5",
+    "redis": "^5.5.6"
   }
 }

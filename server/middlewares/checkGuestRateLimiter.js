@@ -9,7 +9,7 @@ const checkGuestRateLimiter = (req, res, next) => {
   if (userEmail === 'guest@example.com') {
     return guestRateLimiter(req, res, next); // 게스트 계정일 경우
   }
-  next(); // 일반 사용자일 경우 제한 없음
+  return next(); // 일반 사용자일 경우 제한 없음
 };
 
 module.exports = checkGuestRateLimiter;

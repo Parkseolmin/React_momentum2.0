@@ -11,7 +11,7 @@ import styles from './DiaryDisplay.module.css';
 import { useSelector } from 'react-redux';
 
 export default function DiaryDisplay({ data, isLoading }) {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
   return (
     <div className={styles.DiaryContainer}>
       {isLoading ? (

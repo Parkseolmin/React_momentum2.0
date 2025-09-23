@@ -1,71 +1,91 @@
 import axios from 'axios';
 
-// ✅ 기본 및 대체 API 서버 주소
 const primaryBaseURL = process.env.REACT_APP_BASE_URL
-  ? `${process.env.REACT_APP_BASE_URL}/api` // 배포된 환경
-  : 'http://localhost:5000/api'; // 로컬 환경 기본값
+  ? `${process.env.REACT_APP_BASE_URL}/api`
+  : 'http://localhost:5000/api';
 
-const fallbackBaseURL = 'http://localhost:5000/api'; // 로컬 서버
+const fallbackBaseURL = 'http://localhost:5000/api';
 
-// ✅ 현재 연결된 서버 로그 출력
 console.log(`🌐 Primary Base URL: ${primaryBaseURL}`);
 console.log(`🌐 Fallback Base URL: ${fallbackBaseURL}`);
 
-// ✅ Axios 인스턴스 생성
+// 요청용 인스턴스
 const api = axios.create({
-  baseURL: primaryBaseURL, // 기본적으로 배포된 서버로 시작
+  baseURL: primaryBaseURL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// ✅ 요청 인터셉터: 토큰 추가 및 요청 로깅
+// refresh 요청만 담당하는 인스턴스
+const plainAxios = axios.create();
+
+// 요청 인터셉터: 매 요청마다 accessToken을 헤더에 붙임
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
-    console.log('🚀 [REQUEST] Sending to:', config.baseURL + config.url); // 요청 주소 출력
+    console.log(
+      '🚀 [REQUEST]',
+      config.method?.toUpperCase(),
+      config.baseURL + config.url,
+    );
     return config;
   },
   (error) => {
-    console.error('❌ [REQUEST ERROR]:', error);
+    console.error('❌ [REQUEST ERROR]', error);
     return Promise.reject(error);
   },
 );
 
-// ✅ 응답 인터셉터: 응답 로깅 및 에러 처리
+// 응답 인터셉터
 api.interceptors.response.use(
-  (response) => {
-    console.log(
-      '✅ [RESPONSE] From:',
-      response.config.baseURL + response.config.url,
-    );
-    return response;
-  },
+  (res) => res,
   async (error) => {
     const originalRequest = error.config;
+    const skipRefresh = originalRequest?.headers?.['x-skip-refresh'] === '1';
 
-    // 🚨 요청이 실패하고 primaryBaseURL이 사용된 경우 로컬 서버로 재시도
-    if (
-      originalRequest.baseURL === primaryBaseURL &&
-      !originalRequest._retry &&
-      (!error.response || error.response.status >= 500)
-    ) {
-      console.warn(
-        '⚠️ [ERROR] Primary server failed. Retrying with local server...',
-      );
-      originalRequest._retry = true;
-      originalRequest.baseURL = fallbackBaseURL; // 로컬 서버로 전환
-      console.log(
-        '🔄 [RETRY] Switching to:',
-        fallbackBaseURL + originalRequest.url,
-      );
-      return api(originalRequest); // 로컬 서버로 재시도
+    // ✅ 스킵이면 바로 반환 (리프레시 안 함)
+    if (error.response?.status === 401 && skipRefresh) {
+      return Promise.reject(error);
     }
 
-    console.error('❌ [RESPONSE ERROR]:', error);
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (!refreshToken) {
+        // ✅ 리프레시 토큰도 없으면 곧장 로그인으로
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setTimeout(() => (window.location.href = '/login'), 100);
+        return Promise.reject(error);
+      }
+
+      try {
+        const { data } = await plainAxios.post(
+          `${primaryBaseURL}/user/refresh`,
+          { refreshToken },
+        );
+        const { accessToken, refreshToken: newRefresh } = data;
+
+        localStorage.setItem('accessToken', accessToken);
+        if (newRefresh) localStorage.setItem('refreshToken', newRefresh);
+
+        api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setTimeout(() => (window.location.href = '/login'), 100);
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   },
 );

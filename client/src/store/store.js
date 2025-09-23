@@ -5,7 +5,7 @@ import boardReducer from './features/board/boardSlice'; // userSlice에서 reduc
 
 const store = configureStore({
   reducer: {
-    user: userReducer, // 사용자 상태 관리 슬라이스 추가
+    auth: userReducer, // 사용자 상태 관리 슬라이스 추가
     todos: todosReducer,
     board: boardReducer,
   },

@@ -14,7 +14,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
 
   // Redux 상태에서 사용자 정보 가져오기
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.auth.user);
 
   // 로그인 상태 확인
   useEffect(() => {
@@ -53,7 +53,13 @@ export default function LoginPage() {
       const response = await api.post('/user/login', { email, password });
       if (response.status === 200) {
         const { user: userData, tokens } = response.data;
-        dispatch(setUser({ user: userData, token: tokens.accessToken })); // Redux 상태에 사용자 정보 저장
+
+        // 토큰은 로컬스토리지에 저장(인터셉터가 사용)
+        localStorage.setItem('accessToken', tokens.accessToken);
+        localStorage.setItem('refreshToken', tokens.refreshToken);
+
+        // 사용자 상태만 Redux에 저장
+        dispatch(setUser(userData)); // Redux 상태에 사용자 정보 저장
 
         // Redux 상태 저장 후 성공 알람 재생 및 리디렉션
         playSound('success', () => navigate('/')); // 성공 알람 재생 후 리디렉션
