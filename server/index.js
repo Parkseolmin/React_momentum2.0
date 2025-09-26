@@ -9,14 +9,21 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // 미들웨어 설정
+const allowList = [
+  'http://localhost:3000',
+  'https://web-react-momentum2-0-client-m6m4lqe82f54a44f.sel4.cloudtype.app',
+];
+
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://web-react-momentum2-0-client-m6m4lqe82f54a44f.sel4.cloudtype.app',
-    ],
+    origin(origin, cb) {
+      if (!origin) return cb(null, true); // 서버-서버 등
+      const o = origin.replace(/\/+$/, ''); // 혹시 몰라 끝 슬래시 제거
+      return allowList.includes(o)
+        ? cb(null, true)
+        : cb(new Error('Not allowed by CORS'));
+    },
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-skip-refresh'],
   }),
 );
 
