@@ -125,14 +125,38 @@ const refreshAccessToken = async (oldRefreshToken) => {
 const revokeAllRefreshToken = async (userId) => {
   const pattern = `refreshToken:${userId}:*`;
 
-  // 메모리 과점 방지를 위한 scanIterator 사용
-  const iter = redisClient.scanIterator({ MATCH: pattern, COUNT: 100 });
-
-  const pipe = redisClient.multi();
-  for await (const key of iter) {
-    pipe.del(key);
+  // 1) 평탄화 + 중복 제거
+  const keySet = new Set();
+  for await (const chunk of redisClient.scanIterator({
+    MATCH: pattern,
+    COUNT: 200,
+  })) {
+    if (Array.isArray(chunk)) for (const k of chunk) keySet.add(k);
+    else keySet.add(chunk);
   }
-  await pipe.exec();
+  const keys = [...keySet];
+  if (keys.length === 0) return 0;
+
+  // 2) 하나씩 안전하게 삭제 (클러스터/레이스 모두 강함)
+  let removed = 0;
+  for (const k of keys) {
+    try {
+      removed += await redisClient.del(k); // 존재하면 1, 없으면 0
+    } catch (e) {
+      console.error('[RT:DEL one] fail', k, e.message);
+    }
+  }
+
+  // 3) (선택) 남은 키가 있는지 최종 확인
+  let remain = 0;
+  for await (const _ of redisClient.scanIterator({
+    MATCH: pattern,
+    COUNT: 200,
+  }))
+    remain++;
+  console.log('[RT remain]', remain);
+
+  return removed;
 };
 
 module.exports = {

@@ -4,7 +4,7 @@ const routes = require('./routes');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 const { connectRedis } = require('./config/redis');
-
+const debugRoute = require('./routes/debug.api');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 
 const health = require('./health');
 app.use('/api', health);
+app.use('/api', debugRoute);
 
 // 에러 핸들링
 app.use(errorHandler);
